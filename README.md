@@ -1,73 +1,62 @@
-# AI-KOS DeliveryOS – MVP V0.2
+# AI-KOS DeliveryOS – MVP V0.3
 
 **Tên tiếng Việt:** Nền tảng AI quản trị thực hiện dự án, công trình và vận hành tài sản  
 **English Name:** AI-KOS DeliveryOS – AI Project Delivery, Construction & Asset Operations Platform
 
-## Mục tiêu
+> Nền tảng AI quản trị thực hiện dự án (xây nhà phố, sửa chữa/cải tạo nhà, xây dựng công trình, cải tạo mặt bằng/đất...) và vận hành tài sản: tiến độ, chi phí, hợp đồng, nhật ký, phát sinh, nghiệm thu, thanh toán, bảo hành, bảo trì. | AI Project Delivery, Construction & Asset Operations Platform
 
-MVP V0.2 dùng một dự án mẫu **Sửa chữa, cải tạo nhà ở cũ** để kiểm chứng kiến trúc quản trị:
+## V0.3 bổ sung gì?
 
-**Hồ sơ → Công việc → Tiến độ → Chi phí → Nhật ký → Phát sinh → Nghiệm thu → Thanh toán → Bảo hành → Bảo trì.**
+- Màn hình **Hôm nay cần làm gì?** tổng hợp việc quá hạn, sắp đến hạn, phát sinh chờ duyệt, thanh toán và bảo hành/bảo trì.
+- **05 mẫu dự án**:
+  1. Xây nhà phố
+  2. Sửa chữa/cải tạo nhà
+  3. Xây dựng công trình
+  4. Cải tạo mặt bằng/đất
+  5. Quản lý xưởng cơ khí
+- Khi tạo dự án mới, hệ thống **tự sinh khung công việc ban đầu**.
+- Giao diện bảng biểu ưu tiên tiếng Việt.
+- Hồ sơ/hình ảnh nhỏ có thể lưu trực tiếp vào CSDL với metadata.
+- Xuất báo cáo Excel theo từng dự án.
+- Hỗ trợ **PostgreSQL** để lưu bền dữ liệu; nếu chưa cấu hình thì tự dùng SQLite như bản demo.
 
-## 7 màn hình MVP
+## 10 màn hình V0.3
 
-1. Tổng quan
-2. Công việc & tiến độ
-3. Chi phí & dòng tiền
-4. Nhật ký & hình ảnh
-5. Phát sinh
-6. Nghiệm thu & thanh toán
-7. Bảo hành & bảo trì
+0. Hôm nay cần làm gì?
+1. Danh mục dự án
+2. Tổng quan
+3. Công việc & tiến độ
+4. Chi phí & dòng tiền
+5. Nhật ký & hồ sơ
+6. Phát sinh
+7. Nghiệm thu & thanh toán
+8. Bảo hành & bảo trì
+9. Báo cáo
 
-## Nguyên tắc cốt lõi
+## CSDL lưu bền
 
-- Kế hoạch – Thực tế – Chênh lệch.
-- Mỗi công việc, phát sinh, nghiệm thu, thanh toán có mã riêng.
-- AI được phân tích/cảnh báo nhưng **không tự sửa số liệu gốc**.
-- Dữ liệu tài chính, nghiệm thu và phê duyệt phải có người xác nhận.
-- Bản demo không dùng dữ liệu công vụ, mật khẩu, API key hoặc thông tin bí mật.
+Nếu chưa cấu hình gì, ứng dụng chạy bằng:
 
-## Chạy trên máy tính
+`data/deliveryos.db`
+
+Để dùng thật trên Streamlit, nên cấu hình PostgreSQL và thêm vào **Streamlit Secrets**:
+
+```toml
+DATABASE_URL = "postgresql://user:password@host:5432/database"
+```
+
+Khi có `DATABASE_URL`, ứng dụng tự chuyển sang PostgreSQL.
+
+## Chạy trên máy
 
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Đưa lên GitHub
+## Nguyên tắc
 
-Repository dự kiến:
-
-`ai-kos-deliveryos`
-
-Sau khi chạy thử ổn định, có thể đưa toàn bộ thư mục này lên GitHub và kết nối Streamlit Community Cloud.
-
-## Dữ liệu
-
-- `data/deliveryos.db`: cơ sở dữ liệu SQLite mẫu, dùng để chạy ứng dụng.
-- `data/AI_KOS_DeliveryOS_CSDL_Mau_V0.1.xlsx`: bộ dữ liệu mẫu song song để đọc, kiểm tra và tiếp tục thiết kế.
-
-## Trạng thái
-
-**MVP V0.2 – thử nghiệm kiến trúc nghiệp vụ.**
-
-Chưa phải hệ thống quản lý hợp đồng/kế toán/nghiệm thu chính thức và chưa thay thế hồ sơ pháp lý theo quy định.
-
-
-## Bổ sung trong V0.2
-
-- Màn hình **00. Danh mục dự án / Project Portfolio**.
-- Quản lý đồng thời nhiều dự án.
-- Tạo dự án mới trực tiếp trên giao diện.
-- Dữ liệu mẫu gồm:
-  - Sửa chữa, cải tạo nhà ở cũ.
-  - Quản lý xưởng cơ khí mẫu.
-  - Công trình sửa chữa văn phòng mẫu.
-- Mỗi dự án sử dụng `PROJECT_ID` duy nhất và dùng chung kiến trúc công việc – chi phí – nhật ký – phát sinh – nghiệm thu – thanh toán – bảo hành.
-
-## Mục tiêu V0.3
-
-- Bổ sung phân quyền người dùng.
-- Bổ sung hồ sơ hợp đồng và vật tư sâu hơn.
-- Tải ảnh có metadata đầy đủ.
-- Trang tổng hợp toàn danh mục theo chi phí, tiến độ và cảnh báo.
+- Kế hoạch – Thực tế – Chênh lệch.
+- AI được phân tích/cảnh báo nhưng không tự sửa số liệu gốc.
+- Hợp đồng, phát sinh, nghiệm thu, thanh toán phải có người xác nhận.
+- Repository Public chỉ sử dụng dữ liệu demo, không lưu mật khẩu/API key/dữ liệu công vụ thật.
