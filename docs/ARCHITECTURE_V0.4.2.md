@@ -41,3 +41,10 @@ Giữ nguyên dữ liệu kiểm thử V0.4.1 hiện có trên GitHub.
 - Không tạo Repository mới cho từng View.
 - Không đổi schema dữ liệu trong bản chốt này.
 - AI chỉ phân tích/cảnh báo; các phê duyệt nghiệp vụ do con người xác nhận.
+
+## Quy chuẩn liên kết triển khai
+
+- GitHub Repository: `https://github.com/lexuanson-daklak/AI-KOS-DeliveryOS`
+- Streamlit Live App: `https://ai-kos-deliveryos-daklak.streamlit.app`
+- README phải đặt link Streamlit ở phần đầu.
+- Khu vực **About → Website** của Repository GitHub nên dùng cùng URL Streamlit.

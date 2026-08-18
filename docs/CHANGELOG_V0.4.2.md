@@ -16,3 +16,9 @@
 - `app.py` trở thành bộ định tuyến.
 - Lõi dùng chung gom tại `core/runtime.py`.
 - Không thay `data/deliveryos.db`.
+
+## Hoàn thiện liên kết triển khai
+
+- Bổ sung Streamlit Live App vào README.
+- Bổ sung GitHub Repository link vào README.
+- Chốt quy chuẩn: mọi Repository có Streamlit phải gắn link ứng dụng ở README và About/Website.
