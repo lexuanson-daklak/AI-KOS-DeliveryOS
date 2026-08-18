@@ -34,10 +34,10 @@ pid = st.sidebar.selectbox(
 )
 project, work, costs, changes = project_data(pid)
 
-st.title("AI-KOS DeliveryOS V0.5.0")
+st.title("AI-KOS DeliveryOS V0.5.1")
 st.caption(
-    "V0.5.0 – Bảng điều hành dự án sống | GitHub → Streamlit → SQLite | "
-    "AI hỗ trợ tổng hợp, ưu tiên và cảnh báo; không tự sửa số liệu gốc."
+    "V0.5.1 – Vá giao diện điều hành | GitHub → Streamlit → SQLite | "
+    "Tiền hiển thị gọn, màu cảnh báo đúng nghĩa, cách đếm được giải thích rõ."
 )
 
 ctx = {
@@ -54,6 +54,6 @@ view_module.render(ctx)
 
 st.divider()
 st.caption(
-    "AI-KOS DeliveryOS V0.5.0 | Bảng điều hành dự án sống | "
+    "AI-KOS DeliveryOS V0.5.1 | Bảng điều hành dự án sống | "
     "13 Views ổn định | SQLite + sao lưu thủ công."
 )
