@@ -1,35 +1,68 @@
 from core.runtime import *
+from core.command_center import command_actions, portfolio_metrics, operating_message
 
-VIEW_TITLE = '00. Hôm nay cần làm gì?'
+VIEW_TITLE = "00. Hôm nay cần làm gì?"
 
 def render(ctx):
     pid = ctx["pid"]
-    project = ctx["project"]
-    work = ctx["work"]
-    costs = ctx["costs"]
-    changes = ctx["changes"]
-    st.subheader("Hôm nay cần làm gì?")
-    scope = st.radio("Phạm vi", ["Tất cả dự án","Dự án đang chọn"], horizontal=True)
-    todo = today_tasks(pid if scope=="Dự án đang chọn" else None)
 
-    total = len(todo)
-    overdue_n = int((todo["Loại việc"]=="Quá hạn").sum()) if not todo.empty else 0
-    soon_n = int((todo["Loại việc"]=="Sắp đến hạn").sum()) if not todo.empty else 0
-    waiting_n = int(todo["Loại việc"].isin(["Chờ duyệt","Chờ thanh toán"]).sum()) if not todo.empty else 0
-    wm_n = int(todo["Loại việc"].isin(["Bảo hành","Bảo trì"]).sum()) if not todo.empty else 0
+    st.subheader("Bảng điều hành hôm nay")
+    st.caption(
+        "Tự tổng hợp các việc cần chú ý từ tiến độ, phát sinh, thanh toán, "
+        "nghiệm thu và bảo hành/bảo trì."
+    )
 
-    a,b,c,d,e = st.columns(5)
-    a.metric("Tổng việc cần chú ý", total)
-    b.metric("Quá hạn", overdue_n)
-    c.metric("Sắp đến hạn", soon_n)
-    d.metric("Chờ duyệt/thanh toán", waiting_n)
-    e.metric("Bảo hành/bảo trì", wm_n)
+    scope = st.radio(
+        "Phạm vi điều hành",
+        ["Tất cả dự án", "Dự án đang chọn"],
+        horizontal=True
+    )
+    active_pid = pid if scope == "Dự án đang chọn" else None
 
-    if todo.empty:
-        st.success("Không có việc khẩn cấp hoặc sắp đến hạn.")
+    actions = command_actions(active_pid)
+    m = portfolio_metrics(active_pid)
+
+    a,b,c,d = st.columns(4)
+    a.metric("Tổng việc cần chú ý", m["total"])
+    b.metric("Mức đỏ", m["red"])
+    c.metric("Quá hạn", m["overdue"])
+    d.metric("Sắp đến hạn", m["soon"])
+
+    e,f,g,h = st.columns(4)
+    e.metric("Phát sinh chờ duyệt", m["pending_changes"])
+    f.metric("Khoản còn phải trả", m["payment_due"])
+    g.metric("Nghiệm thu còn lỗi", m["defects"])
+    h.metric("Bảo hành/bảo trì", m["maintenance"])
+
+    if m["red"] > 0:
+        st.error(operating_message(m))
+    elif m["total"] > 0:
+        st.warning(operating_message(m))
     else:
-        st.dataframe(todo, use_container_width=True, hide_index=True)
+        st.success(operating_message(m))
 
-# =========================================================
-# 01. DANH MỤC DỰ ÁN
-# =========================================================
+    st.markdown("### Việc ưu tiên theo thứ tự xử lý")
+    if actions.empty:
+        st.success("Hiện chưa có việc ưu tiên nổi bật.")
+    else:
+        display = actions.copy()
+        display["Mức ưu tiên"] = display["Ưu tiên"].apply(
+            lambda x: "Rất cao" if x >= 90 else ("Cao" if x >= 80 else ("Trung bình" if x >= 65 else "Theo dõi"))
+        )
+        display = display[
+            ["Mức","Mức ưu tiên","Nhóm","Mã dự án","Dự án","Việc cần xử lý","Lý do","Giá trị"]
+        ]
+        st.dataframe(display, use_container_width=True, hide_index=True)
+
+        st.markdown("### 5 việc nên xử lý trước")
+        for i, (_, r) in enumerate(actions.head(5).iterrows(), start=1):
+            value = f" – {r['Giá trị']}" if str(r["Giá trị"]).strip() else ""
+            st.write(
+                f"**{i}. {r['Mức']} {r['Dự án']}** – {r['Việc cần xử lý']}{value}  \n"
+                f"{r['Lý do']}"
+            )
+
+    st.info(
+        "AI ở V0.5.0 mới làm nhiệm vụ tổng hợp, xếp ưu tiên và cảnh báo theo quy tắc. "
+        "Không tự duyệt phát sinh, không tự nghiệm thu và không tự thay đổi số tiền."
+    )

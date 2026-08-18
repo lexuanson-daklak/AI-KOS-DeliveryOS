@@ -27,16 +27,33 @@ if not projects:
     st.error("Chưa có dự án trong dữ liệu hiện tại.")
     st.stop()
 
-pid = st.sidebar.selectbox("Dự án", list(projects.keys()), format_func=lambda x: f"{x} – {projects[x]}")
+pid = st.sidebar.selectbox(
+    "Dự án",
+    list(projects.keys()),
+    format_func=lambda x: f"{x} – {projects[x]}"
+)
 project, work, costs, changes = project_data(pid)
 
-st.title("AI-KOS DeliveryOS V0.4.2")
-st.caption("V0.4.2 FINAL – cấu trúc Views | GitHub → Streamlit → SQLite | AI hỗ trợ phân tích/cảnh báo, không tự sửa số liệu gốc.")
+st.title("AI-KOS DeliveryOS V0.5.0")
+st.caption(
+    "V0.5.0 – Bảng điều hành dự án sống | GitHub → Streamlit → SQLite | "
+    "AI hỗ trợ tổng hợp, ưu tiên và cảnh báo; không tự sửa số liệu gốc."
+)
 
-ctx = {"pid":pid, "project":project, "work":work, "costs":costs, "changes":changes}
+ctx = {
+    "pid": pid,
+    "project": project,
+    "work": work,
+    "costs": costs,
+    "changes": changes,
+}
+
 module_name = dict(VIEW_REGISTRY)[page]
 view_module = importlib.import_module(module_name)
 view_module.render(ctx)
 
 st.divider()
-st.caption("AI-KOS DeliveryOS V0.4.2 FINAL | Cấu trúc Views ổn định | SQLite + sao lưu thủ công.")
+st.caption(
+    "AI-KOS DeliveryOS V0.5.0 | Bảng điều hành dự án sống | "
+    "13 Views ổn định | SQLite + sao lưu thủ công."
+)
