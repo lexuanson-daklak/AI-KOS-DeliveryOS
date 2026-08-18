@@ -1,28 +1,48 @@
-# AI-KOS DeliveryOS – MVP V0.4
+# AI-KOS DeliveryOS – MVP V0.4.2 FINAL
 
 **Tên tiếng Việt:** Nền tảng AI quản trị thực hiện dự án, công trình và vận hành tài sản  
 **English Name:** AI-KOS DeliveryOS – AI Project Delivery, Construction & Asset Operations Platform
 
-## Quan điểm V0.4
+## Trạng thái chốt
 
-V0.4 giữ kiến trúc **đơn giản**:
+**V0.4.2 FINAL – bản chốt cấu trúc Views.**
 
-**GitHub → Streamlit → SQLite**
+Kiến trúc hiện tại: **GitHub → Streamlit → SQLite**.
 
-Không bổ sung PostgreSQL hay một nguồn dữ liệu bên ngoài ở giai đoạn này.
+Không bổ sung PostgreSQL hoặc nguồn dữ liệu ngoài ở giai đoạn này.
 
-Để tránh mất dữ liệu thử nghiệm, V0.4 có chức năng **tải bản sao `deliveryos.db` về máy và khôi phục lại khi cần**.
+## Cấu trúc GitHub
 
-## V0.4 bổ sung
+```text
+AI-KOS-DeliveryOS/
+├── app.py                        # Bộ định tuyến ứng dụng
+├── core/
+│   └── runtime.py                # CSDL, hàm dùng chung, cảnh báo, mẫu dự án, xuất báo cáo
+├── views/
+│   ├── v00_today.py
+│   ├── v01_portfolio.py
+│   ├── v02_project_profile.py
+│   ├── v03_dashboard.py
+│   ├── v04_tasks.py
+│   ├── v05_contracts.py
+│   ├── v06_resources.py
+│   ├── v07_cost_cashflow.py
+│   ├── v08_diary_files.py
+│   ├── v09_changes.py
+│   ├── v10_acceptance_payment.py
+│   ├── v11_warranty.py
+│   └── v12_reports_backup.py
+├── docs/
+│   ├── ARCHITECTURE_V0.4.2.md
+│   ├── VIEW_MAP_V0.4.2.md
+│   └── CHANGELOG_V0.4.2.md
+├── requirements.txt
+├── .streamlit/config.toml
+└── data/
+    └── deliveryos.db             # GIỮ NGUYÊN trên GitHub, không có trong gói update
+```
 
-- Hồ sơ dự án có thể chỉnh sửa trực tiếp.
-- Hợp đồng & đối tác/nhà thầu.
-- Vật tư & nhân công.
-- Báo cáo Excel.
-- Sao lưu và khôi phục toàn bộ SQLite.
-- Giữ màn hình “Hôm nay cần làm gì?” và 05 mẫu dự án.
-
-## 13 màn hình
+## 13 Views
 
 0. Hôm nay cần làm gì?
 1. Danh mục dự án
@@ -38,16 +58,9 @@ Không bổ sung PostgreSQL hay một nguồn dữ liệu bên ngoài ở giai �
 11. Bảo hành & bảo trì
 12. Báo cáo & sao lưu
 
-## Cập nhật từ V0.3
+## Nguyên tắc cập nhật
 
-Chỉ cần thay:
-- `app.py`
-- `requirements.txt`
-- `README.md`
-
-và thêm:
-- `docs/CHANGELOG_V0.4.md`
-
-**Giữ nguyên thư mục `data` và file `data/deliveryos.db` hiện tại.**
-
-V0.4 tự tạo các bảng mới `partners`, `contracts`, `materials`, `labour_logs` nếu chưa có.
+- Mỗi màn hình Streamlit tương ứng một file trong `views/`.
+- `app.py` chỉ chọn dự án, chọn View và chuyển ngữ cảnh chung.
+- Dữ liệu hiện tại giữ nguyên trong `data/deliveryos.db`.
+- Khi cập nhật V0.4.2 FINAL, **không thay file `deliveryos.db`**.
